@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
 from flask_login import current_user, login_user
 from project.utils.auth import authenticate, create_user
 
@@ -42,3 +42,26 @@ def signup():
             return redirect(url_for('app.index'))
 
         return render_template('app/signup.html')
+    
+@app.route('/newpost')
+def newpost():
+    return render_template('app/newpost.html')
+
+@app.route('/generate', methods=['GET', 'POST'])
+def generate():
+    if request.method == 'POST':
+        keyword = request.form.get('keyword')
+        link = request.form.get('link')
+        post = {
+            'keyword': keyword,
+            'link': link,
+            'post': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad nostrum dicta facere soluta animi? Voluptate similique magni minus unde omnis officia ex, saepe id doloremque nulla, aliquid voluptatum rerum beatae! Incidunt nemo cum, ut maxime perspiciatis quisquam, esse dignissimos nobis tempora quasi fugit aperiam. Corporis, tempore! Aperiam aliquid eum nemo?'
+        }
+        return jsonify(post)
+    elif request.method == 'GET':
+        post = {
+            'keyword': None,
+            'link': None,
+            'post': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad nostrum dicta facere soluta animi? Voluptate similique magni minus unde omnis officia ex, saepe id doloremque nulla, aliquid voluptatum rerum beatae! Incidunt nemo cum, ut maxime perspiciatis quisquam, esse dignissimos nobis tempora quasi fugit aperiam. Corporis, tempore! Aperiam aliquid eum nemo?'
+        }
+        return jsonify(post)

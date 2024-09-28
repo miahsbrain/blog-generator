@@ -1,0 +1,23 @@
+{% extends 'app/base.html' %}
+{% block title %}
+    Sign up
+{% endblock title %}
+{% block content %}
+{% set messages = get_flashed_messages() %}
+{% for message in messages %}
+    <h2>{{ message }}</h2>
+{% endfor %}
+    <form action="" method="post">
+        <label for="fname">First name</label><br>
+        <input type="text" name="fname" id="fname" class="border-2"><br>
+        <label for="lname">Last name</label><br>
+        <input type="text" name="lname" id="lname" class="border-2"><br>
+        <label for="email">Email</label><br>
+        <input type="email" name="email" id="email" class="border-2"><br>
+        <label for="password">Password</label><br>
+        <input type="password" name="password" class="border-2"><br>
+        <label for="cpassword">Confirm assword</label><br>
+        <input type="password" name="cpassword" class="border-2"><br>
+        <button type="submit" class="mt-4 border-2 rounded px-4 py-2">Sign up</button>
+    </form>
+{% endblock content %}

@@ -1,0 +1,17 @@
+{% extends 'app/base.html' %}
+{% block title %}
+    Generate post
+{% endblock title %}
+{% block content %}
+{% set messages = get_flashed_messages() %}
+{% for message in messages %}
+    <h2>{{ message }}</h2>
+{% endfor %}
+    <form action="{{ url_for('app.generate') }}" method="post">
+        <label for="keyword">Keyword</label><br>
+        <input type="text" class="border-2" name="keyword"><br>
+        <label for="link">Link</label><br>
+        <input type="text" class="border-2" name="link"><br>
+        <button type="submit" class="mt-4 border-2 rounded px-4 py-2">Generate</button>
+    </form>
+{% endblock content %}

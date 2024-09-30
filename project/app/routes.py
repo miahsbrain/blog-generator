@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
 from project.utils.auth import authenticate, create_user
 
 app = Blueprint('app', __name__, template_folder='templates', static_folder='static', static_url_path='/')
@@ -42,7 +42,12 @@ def signup():
             return redirect(url_for('app.index'))
 
         return render_template('app/signup.html')
-    
+
+@app.route('/signout')
+def signout():
+    logout_user()
+    return redirect(url_for('core.index'))
+
 @app.route('/newpost')
 def newpost():
     return render_template('app/newpost.html')

@@ -1,4 +1,4 @@
-from project.extensions import db
+from project.extensions.dependencies import db
 from datetime import datetime, timezone
 from sqlalchemy import Column, DateTime
 

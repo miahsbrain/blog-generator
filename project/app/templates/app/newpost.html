@@ -7,11 +7,45 @@
 {% for message in messages %}
     <h2>{{ message }}</h2>
 {% endfor %}
-    <form action="{{ url_for('app.generate') }}" method="post">
+    <!-- <form action="{{ url_for('app.generate') }}" method="post">
         <label for="keyword">Keyword</label><br>
         <input type="text" class="border-2" name="keyword"><br>
         <label for="link">Link</label><br>
         <input type="text" class="border-2" name="link"><br>
         <button type="submit" class="mt-4 border-2 rounded px-4 py-2">Generate</button>
-    </form>
+    </form> -->
+    <div>
+        <input type="text" id="uinput">
+        <button id="button">Fetch stream</button>
+    </div>
+    <div id="content">
+    
+    </div>
+    
+    
+    <script>
+        const button = document.getElementById('button');
+        const content = document.getElementById('content');
+        const uinput = document.getElementById('uinput');
+
+        button.addEventListener('click', async function (e) {
+            const response = await fetch('/app/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: uinput.value })
+            });
+            const reader = response.body.getReader();
+            let output = "";
+
+            while (true) {
+                const { done, value } = await reader.read();
+                output += new TextDecoder().decode(value);
+                content.innerText = output;
+
+                if (done) {
+                    return
+                }
+            }
+        });
+    </script>
 {% endblock content %}

@@ -1,5 +1,5 @@
 from project.models.base import BaseModel
-from project.extensions import db
+from project.extensions.dependencies import db
 from sqlalchemy import Column, String, Integer, ForeignKey, Text
 from sqlalchemy.orm import relationship, backref
 

@@ -1,6 +1,8 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash, stream_with_context
 from flask_login import current_user, login_user
 from project.utils.auth import authenticate, create_user
+from project.extensions.dependencies import client
+
 
 app = Blueprint('app', __name__, template_folder='templates', static_folder='static', static_url_path='/')
 
@@ -49,19 +51,16 @@ def newpost():
 
 @app.route('/generate', methods=['GET', 'POST'])
 def generate():
-    if request.method == 'POST':
-        keyword = request.form.get('keyword')
-        link = request.form.get('link')
-        post = {
-            'keyword': keyword,
-            'link': link,
-            'post': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad nostrum dicta facere soluta animi? Voluptate similique magni minus unde omnis officia ex, saepe id doloremque nulla, aliquid voluptatum rerum beatae! Incidunt nemo cum, ut maxime perspiciatis quisquam, esse dignissimos nobis tempora quasi fugit aperiam. Corporis, tempore! Aperiam aliquid eum nemo?'
-        }
-        return jsonify(post)
-    elif request.method == 'GET':
-        post = {
-            'keyword': None,
-            'link': None,
-            'post': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad nostrum dicta facere soluta animi? Voluptate similique magni minus unde omnis officia ex, saepe id doloremque nulla, aliquid voluptatum rerum beatae! Incidunt nemo cum, ut maxime perspiciatis quisquam, esse dignissimos nobis tempora quasi fugit aperiam. Corporis, tempore! Aperiam aliquid eum nemo?'
-        }
-        return jsonify(post)
+    def generate_stream():
+        response = client.chat.completions.create(
+            model='qwen-0.5',
+            stream=True,
+            messages=[
+                {'role': 'system', 'content': 'You are a helpful assistant'},
+                {'role': 'user', 'content': 'Can you tell me a joke?'}
+            ]
+        )
+        for res in response:
+            if res.choices[0].delta.content:
+                yield str(res.choices[0].delta.content)
+    return generate_stream()

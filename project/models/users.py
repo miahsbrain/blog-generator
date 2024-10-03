@@ -1,4 +1,4 @@
-from project.extensions import db, bcrypt
+from project.extensions.dependencies import db, bcrypt
 from project.models.base import BaseModel
 from sqlalchemy import Column, String, Integer, ForeignKey, Boolean, Text
 from flask_login import UserMixin

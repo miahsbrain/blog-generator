@@ -1,4 +1,4 @@
-from project.extensions import db, bcrypt
+from project.extensions.dependencies import db, bcrypt
 from project.models.users import User
 from sqlalchemy import exists
 import re

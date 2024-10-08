@@ -32,7 +32,7 @@
             const response = await fetch('/app/generate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: uinput.value })
+                body: JSON.stringify({ url_one: uinput.value })
             });
             const reader = response.body.getReader();
             let output = "";

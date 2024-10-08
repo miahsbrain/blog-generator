@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, flash, Response
 from flask_login import current_user, login_user, logout_user
 from project.utils.auth import authenticate, create_user
-from project.extensions.dependencies import client
+from project.extensions.dependencies import task_manager
 
 
 app = Blueprint('app', __name__, template_folder='templates', static_folder='static', static_url_path='/')
@@ -56,16 +56,9 @@ def newpost():
 
 @app.route('/generate', methods=['GET', 'POST'])
 def generate():
-    def generate_stream():
-        response = client.chat.completions.create(
-            model='qwen-0.5',
-            stream=True,
-            messages=[
-                {'role': 'system', 'content': 'You are a helpful assistant'},
-                {'role': 'user', 'content': 'Can you tell me a joke?'}
-            ]
-        )
-        for res in response:
-            if res.choices[0].delta.content:
-                yield str(res.choices[0].delta.content)
-    return generate_stream()
+    data = request.get_json()
+    url_one = data.get('url_one')
+    if not url_one:
+        url_one = 'https://quotes.toscrape.com/random'
+    urls = [url_one, ]
+    return Response(task_manager.process_request(urls=urls), content_type='text/event-stream')

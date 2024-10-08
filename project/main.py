@@ -6,8 +6,7 @@ from project.config import config
 config = config['development']
 
 def create_app():
-    from project.extensions.dependencies import db, bcrypt
-    # from config import DevelopmentConfig
+    from project.extensions.dependencies import db, bcrypt, task_manager
 
     main = Flask(__name__)
     
@@ -15,6 +14,12 @@ def create_app():
 
     # Db
     db.init_app(main)
+
+    # Bcrypt
+    bcrypt.init_app(main)
+
+    # Task manager
+    task_manager.init_app()
 
     # Login manager
     login_manager = LoginManager()
@@ -30,9 +35,6 @@ def create_app():
     # Login manager anonymous user class
     login_manager.anonymous_user = AnonymousUser
 
-    # Bcrypt
-    bcrypt.init_app(main)
-
     # Import blueprints
     from project.core.routes import core
     from project.app.routes import app
@@ -44,7 +46,6 @@ def create_app():
     main.register_blueprint(app, url_prefix='/app')
     main.register_blueprint(admin, url_prefix='/admin')
     
-
     with main.app_context():
         db.create_all()
 

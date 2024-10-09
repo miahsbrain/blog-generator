@@ -17,165 +17,188 @@
     {% block head %}
     {% endblock %}
 </head>
-<body x-data="{ sidebarOpen: true }">
-    <header>
-        <div class="flex justify-between items-center p-3 w-full border-b border-b-gray-300 select-none">
-            <div class="flex items-center gap-4">
-                <div class="cursor-pointer" @click="sidebarOpen = ! sidebarOpen">
-                    <span class="text-3xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"
-                                d="M4 7h3m13 0h-9m9 10h-3M4 17h9m-9-5h16" />
-                        </svg>
-                    </span>
+<body x-data="{ sidebarOpen: false }">
+    <div class="flex h-screen w-screen flex-col">
+        <header class="shrink-0">
+            <div class="flex justify-between items-center p-3 w-full border-b border-b-gray-300 select-none">
+                <div class="flex items-center gap-4">
+                    <div class="cursor-pointer" @click="sidebarOpen = ! sidebarOpen">
+                        <span class="text-3xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"
+                                    d="M4 7h3m13 0h-9m9 10h-3M4 17h9m-9-5h16" />
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="flex justify-center items-center gap-3">
+                        <div class="h-8 aspect-square bg-transparent">
+                            <img src="{{ url_for('core.static', filename='core/img/blogai-logo.jpeg' ) }}" alt="" class="h-8 aspect-square rounded-full">
+                        </div>
+                        <h3>Dashboard</h3>
+                    </div>
                 </div>
                 <div class="flex justify-center items-center gap-3">
-                    <div class="h-8 aspect-square bg-transparent">
-                        <img src="{{ url_for('core.static', filename='core/img/blogai-logo.jpeg' ) }}" alt="" class="h-8 aspect-square rounded-full">
+                    <div class="flex items-center border border-gray-200 rounded-md overflow-hidden p-1 gap-1">
+                        <span class="text-xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M15.553 15.553a7.06 7.06 0 1 0-9.985-9.985a7.06 7.06 0 0 0 9.985 9.985m0 0L20 20" />
+                            </svg>
+                        </span>
+                        <input type="search" class="outline-none hidden md:block">
                     </div>
-                    <h3>Dashboard</h3>
-                </div>
-            </div>
-            <div class="flex justify-center items-center gap-3">
-                <div class="flex items-center border border-gray-200 rounded-md overflow-hidden p-1 gap-1">
-                    <span class="text-xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                d="M15.553 15.553a7.06 7.06 0 1 0-9.985-9.985a7.06 7.06 0 0 0 9.985 9.985m0 0L20 20" />
-                        </svg>
-                    </span>
-                    <input type="search" class="outline-none hidden md:block">
-                </div>
-                <div class="h-8 aspect-square bg-transparent">
-                    <img src="{{ url_for('app.static', filename='app/img/pfp.jpg' ) }}" alt="" class="h-8 aspect-square rounded-full">
-                </div>
-            </div>
-        </div>
-    </header>
-    <!-- Main -->
-    <main>
-        <aside
-        class="z-[3] h-screen fixed w-[16rem] md:w-[18rem] top-0 bottom-0 bg-slate-50"
-        x-cloak
-        x-show="sidebarOpen"
-        x-transition:enter="transition ease-out duration-150 origin-left"
-        x-transition:enter-start="scale-x-0 scale-y-100"
-        x-transition:enter-end="opacity-100 scale-100"
-        x-transition:leave="transition ease-in duration-150 origin-left"
-        x-transition:leave-start="opacity-100 scale-100"
-        x-transition:leave-end="scale-x-0"
-        @click="sidebarOpen = false"
-        >
-            <div class="flex flex-col bg-slate-50 h-full w-[16rem] md:w-[18rem]">
-                <!-- sidebar header -->
-                <div class="flex justify-between items-center p-3 w-full select-none shrink-0">
-                    <div class="flex items-center gap-4">
-                        <div class="flex justify-center items-center gap-3">
-                            <div class="h-8 aspect-square bg-transparent">
-                                <img src="{{ url_for('core.static', filename='core/img/blogai-logo.jpeg' ) }}" alt=""
-                                    class="h-8 aspect-square rounded-full">
+                    <div
+                    x-data="{ pfpModal: true }"
+                    @click="pfpModal = !pfpModal"
+                    class="h-8 aspect-square bg-transparent relative">
+                        <img src="{{ url_for('app.static', filename='app/img/pfp.jpg' ) }}" alt="" class="h-8 aspect-square rounded-full">
+                        <div
+                        x-show="pfpModal"
+                        x-cloak
+                        class="absolute top-full mt-1 w-[15rem] z-[5] right-0 bg-slate-100 rounded-md p-1">
+                            <div>
+                                <a href="" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-200 rounded-md">
+                                    <span class="text-xl">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                            <path fill="currentColor"
+                                                d="M12 8a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 2a2 2 0 0 0-2 2a2 2 0 0 0 2 2a2 2 0 0 0 2-2a2 2 0 0 0-2-2m-2 12c-.25 0-.46-.18-.5-.42l-.37-2.65c-.63-.25-1.17-.59-1.69-.99l-2.49 1.01c-.22.08-.49 0-.61-.22l-2-3.46a.493.493 0 0 1 .12-.64l2.11-1.66L4.5 12l.07-1l-2.11-1.63a.493.493 0 0 1-.12-.64l2-3.46c.12-.22.39-.31.61-.22l2.49 1c.52-.39 1.06-.73 1.69-.98l.37-2.65c.04-.24.25-.42.5-.42h4c.25 0 .46.18.5.42l.37 2.65c.63.25 1.17.59 1.69.98l2.49-1c.22-.09.49 0 .61.22l2 3.46c.13.22.07.49-.12.64L19.43 11l.07 1l-.07 1l2.11 1.63c.19.15.25.42.12.64l-2 3.46c-.12.22-.39.31-.61.22l-2.49-1c-.52.39-1.06.73-1.69.98l-.37 2.65c-.04.24-.25.42-.5.42zm1.25-18l-.37 2.61c-1.2.25-2.26.89-3.03 1.78L5.44 7.35l-.75 1.3L6.8 10.2a5.55 5.55 0 0 0 0 3.6l-2.12 1.56l.75 1.3l2.43-1.04c.77.88 1.82 1.52 3.01 1.76l.37 2.62h1.52l.37-2.61c1.19-.25 2.24-.89 3.01-1.77l2.43 1.04l.75-1.3l-2.12-1.55c.4-1.17.4-2.44 0-3.61l2.11-1.55l-.75-1.3l-2.41 1.04a5.42 5.42 0 0 0-3.03-1.77L12.75 4z" />
+                                        </svg>
+                                    </span>
+                                    <h3 class="font-semibold">Settings</h3>
+                                </a>
+                                <a href="" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-200 rounded-md">
+                                    <span class="text-xl">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                            <path fill="currentColor"
+                                                d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z" />
+                                        </svg>
+                                    </span>
+                                    <h3 class="font-semibold">Logout</h3>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-slate-300 text-black rounded-md cursor-pointer" @click="sidebarOpen = ! sidebarOpen">
-                        <span class="text-3xl" >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M6.758 17.243L12.001 12m5.243-5.243L12 12m0 0L6.758 6.757M12.001 12l5.243 5.243" />
-                            </svg>
-                        </span>
-                    </div>
                 </div>
-
-                <!-- sidebar content -->
-                <div class="flex-1 overflow-y-auto">
-                    <h3 class="px-2 py-3 font-semibold">Recent posts</h3>
-                    <div class="flex flex-col gap-1">
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-100 rounded-md">
-                            <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
-                        </a>
+            </div>
+        </header>
+        <!-- Main -->
+        <div class="flex-1 h-full overflow-auto">
+            <aside
+            class="z-[3] h-screen fixed w-[16rem] md:w-[18rem] top-0 bottom-0 bg-slate-100"
+            x-cloak
+            x-show="sidebarOpen"
+            x-transition:enter="transition ease-out duration-150 origin-left"
+            x-transition:enter-start="scale-x-0 scale-y-100"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-150 origin-left"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="scale-x-0"
+            >
+                <div class="flex flex-col bg-slate-100 h-full w-[16rem] md:w-[18rem]">
+                    <!-- sidebar header -->
+                    <div class="flex justify-between items-center p-3 w-full select-none shrink-0">
+                        <div class="flex items-center gap-4">
+                            <div class="flex justify-center items-center gap-3">
+                                <div class="h-8 aspect-square bg-transparent">
+                                    <img src="{{ url_for('core.static', filename='core/img/blogai-logo.jpeg' ) }}" alt=""
+                                        class="h-8 aspect-square rounded-full">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-slate-300 text-black rounded-md cursor-pointer" @click="sidebarOpen = !sidebarOpen">
+                            <span class="text-3xl" >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M6.758 17.243L12.001 12m5.243-5.243L12 12m0 0L6.758 6.757M12.001 12l5.243 5.243" />
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+    
+                    <!-- sidebar content -->
+                    <div class="flex-1 overflow-y-auto">
+                        <h3 class="px-2 py-3 font-semibold">Recent posts</h3>
+                        <div class="flex flex-col gap-1">
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            <a href="" class="flex items-center gap-1 w-full px-2 pr-3 py-[.01rem] hover:bg-gray-200 rounded-md">
+                                <h3 class="line-clamp-1">The begining after the end and the monster after the end</h3>
+                            </a>
+                            
+                            
+                        </div>
                         
                     </div>
-                    
+    
+                    <div class="shrink-0 py-1">
+                        <a href="" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-200 rounded-md">
+                            <span class="text-3xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M7 20v-2h10v2zm4-4V7.825L8.4 10.4L7 9l5-5l5 5l-1.4 1.4L13 7.825V16z" />
+                                </svg>
+                            </span>
+                            <h3 class="font-semibold">Plans</h3>
+                        </a>
+                        <a href="" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-200 rounded-md">
+                            <span class="text-3xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                    <path fill="currentColor"
+                                        d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z" />
+                                </svg>
+                            </span>
+                            <h3 class="font-semibold">Logout</h3>
+                        </a>
+                    </div>
+    
                 </div>
-
-                <div class="shrink-0 py-1">
-                    <a href="" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-100 rounded-md">
-                        <span class="text-3xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="M7 20v-2h10v2zm4-4V7.825L8.4 10.4L7 9l5-5l5 5l-1.4 1.4L13 7.825V16z" />
-                            </svg>
-                        </span>
-                        <h3 class="font-semibold">Plans</h3>
-                    </a>
-                    <a href="" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-100 rounded-md">
-                        <span class="text-3xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                <path fill="currentColor"
-                                    d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z" />
-                            </svg>
-                        </span>
-                        <h3 class="font-semibold">Logout</h3>
-                    </a>
-                </div>
-
-            </div>
-        </aside>
-        {% block content %}
-            ADD CONTENTS
-        {% endblock %}
-    </main>
+            </aside>
+            <main class="h-full w-full">
+                {% block content %}
+                    ADD CONTENTS
+                {% endblock %}
+            </main>
+        </div>
+    </div>
 
 </body>
 </html>

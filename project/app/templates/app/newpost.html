@@ -21,12 +21,13 @@
     <div id="content">
     
     </div>
-    
+
     
     <script>
         const button = document.getElementById('button');
         const content = document.getElementById('content');
         const uinput = document.getElementById('uinput');
+        const decoder = new TextDecoder()
 
         button.addEventListener('click', async function (e) {
             const response = await fetch('/app/generate', {
@@ -39,7 +40,7 @@
 
             while (true) {
                 const { done, value } = await reader.read();
-                output += new TextDecoder().decode(value);
+                output += decoder.decode(value);
                 content.innerText = output;
 
                 if (done) {

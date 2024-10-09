@@ -3,9 +3,83 @@
     APP/INDEX
 {% endblock %}
 {% block head %}
-    
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
+    <style>
+        .ck-editor__editable {
+            min-height: 40rem;
+            max-height: 40rem;
+        }
+    </style>
 {% endblock %}
 {% block content %}
-    <h2 class="text-2xl">APP/INDEX</h2>
-    <h4>Hello, <span class="text-red-400">{{ current_user.get_full_name() }}</span></h4>
+    <div class="h-full w-full bg-slate-50">
+        <div class="h-full max-w-7xl mx-auto p-2 md:py-10">
+            <div class="md:grid h-full md:grid-cols-[17rem_1fr] lg:grid-cols-[23rem_1fr] md:gap-1 lg:gap-2 rounded-md overflow-auto bg-gray-200">
+                <div class="w-full md:overflow-auto pb-2">
+                    <h2 class="text-xl font-semibold px-6 py-2 md:mt-4">Article Generator</h2>
+                    <form action="" class="mt-2">
+                        <div class="px-4 lg:px-6 py-1">
+                            <label for="link1" class="block mb-1 text-sm font-semibold text-slate-700">Link one:</label>
+                            <input type="text" name="link1" class="w-full border text-slate-600 border-slate-300 focus:ring-1 focus:ring-slate-600 outline-none rounded-md px-2 py-1 text-sm" placeholder="https://www.example.com">
+                        </div>
+                        <div class="px-4 lg:px-6 py-1">
+                            <label for="link2" class="block mb-1 text-sm font-semibold text-slate-700">Link one:</label>
+                            <input type="text" name="link2" class="w-full border text-slate-600 border-slate-300 focus:ring-1 focus:ring-slate-600 outline-none rounded-md px-2 py-1 text-sm" placeholder="https://www.example.com">
+                        </div>
+                        <div class="px-4 lg:px-6 py-1 mt-4 md:mt-6">
+                            <button class="px-4 py-2 border rounded-md bg-amber-500 hover:bg-amber-600">Generate</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="w-full overflow-x-auto">
+                    <div class="w-full h-full px-2 lg:px-4 py-2">
+                        <textarea id="editor"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Initialize CKEditor
+            ClassicEditor
+                .create(document.querySelector('#editor'))
+                .then(editor => {
+                    window.editorInstance = editor;  // Make the editor instance accessible globally
+                })
+                .catch(error => {
+                    console.error('Error initializing CKEditor:', error);
+                });
+
+            // Function to populate CKEditor with content from an API stream
+            async function populateCKEditorFromStream() {
+                const apiUrl = 'https://your-api-endpoint.com/stream';  // Replace with your actual API URL
+
+                try {
+                    const response = await fetch(apiUrl);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let result = '';
+                    let done = false;
+
+                    while (!done) {
+                        const { value, done: readerDone } = await reader.read();
+                        done = readerDone;
+                        result += decoder.decode(value, { stream: !done });
+                    }
+
+                    // After getting the complete stream, populate the CKEditor
+                    window.editorInstance.setData(result);
+
+                } catch (error) {
+                    console.error('Failed to fetch content stream:', error);
+                }
+            }
+
+            // Call the function to fetch and populate CKEditor
+            // populateCKEditorFromStream();
+    </script>
 {% endblock %}

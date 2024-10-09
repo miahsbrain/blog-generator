@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('core.static', filename='core/css/style.css') }}">
     <style>
-        [x-cloak] { display: none !important; }
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
     <script defer src="{{ url_for('core.static', filename='/core/js/alpinejs@3.x.x.min.js') }}"></script>
     <title>
         {% block title %}
-            ADD TITLE
+        ADD TITLE
         {% endblock %}
     </title>
     {% block head %}
-        
+
     {% endblock %}
 </head>
+
 <body>
     <div class="flex h-screen w-screen flex-col">
         <header class="shrink-0">
@@ -31,14 +35,18 @@
                     </div>
                 </div>
 
-                <div class="flex justify-center items-center gap-3">
-                    <div>
-                        <a href="" class="hover:text-amber-600 text-xl hover:font-semibold uppercase">Home</a>
+                <div class="hidden md:block">
+                    <div class="flex justify-center items-center gap-3">
+                        <div>
+                            <a href="" class="hover:text-amber-600 text-xl hover:font-semibold uppercase">Home</a>
+                        </div>
                     </div>
                 </div>
 
                 <div class="flex justify-center items-center gap-3">
-                    <button class="px-4 py-2 border bg-slate-50 font-semibold rounded-md ring-1 ring-slate-300 hover:bg-slate-300">Sign Up</button>
+                    <button
+                        class="px-4 py-2 border bg-slate-50 font-semibold rounded-md ring-1 ring-slate-300 hover:bg-slate-300">Sign
+                        Up</button>
                 </div>
             </div>
 
@@ -54,4 +62,5 @@
     </div>
 
 </body>
+
 </html>

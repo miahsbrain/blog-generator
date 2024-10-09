@@ -47,8 +47,9 @@
                         </span>
                         <input type="search" class="outline-none hidden md:block">
                     </div>
+                    <!-- Profile icon -->
                     <div
-                    x-data="{ pfpModal: true }"
+                    x-data="{ pfpModal: false }"
                     @click="pfpModal = !pfpModal"
                     class="h-8 aspect-square bg-transparent relative">
                         <img src="{{ url_for('app.static', filename='app/img/pfp.jpg' ) }}" alt="" class="h-8 aspect-square rounded-full">
@@ -80,9 +81,8 @@
                     </div>
                 </div>
             </div>
-        </header>
-        <!-- Main -->
-        <div class="flex-1 h-full overflow-auto">
+
+            <!-- sidebar content -->
             <aside
             class="z-[3] h-screen fixed w-[16rem] md:w-[18rem] top-0 bottom-0 bg-slate-100"
             x-cloak
@@ -115,7 +115,6 @@
                         </div>
                     </div>
     
-                    <!-- sidebar content -->
                     <div class="flex-1 overflow-y-auto">
                         <h3 class="px-2 py-3 font-semibold">Recent posts</h3>
                         <div class="flex flex-col gap-1">
@@ -192,6 +191,9 @@
     
                 </div>
             </aside>
+        </header>
+        <!-- Main -->
+        <div class="flex-1 h-full overflow-auto">
             <main class="h-full w-full">
                 {% block content %}
                     ADD CONTENTS

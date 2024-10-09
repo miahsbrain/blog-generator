@@ -1,23 +1,82 @@
-{% extends 'app/base.html' %}
+{% extends 'app/base2.html' %}
 {% block title %}
     Sign up
 {% endblock title %}
 {% block content %}
 {% set messages = get_flashed_messages() %}
 {% for message in messages %}
-    <h2>{{ message }}</h2>
 {% endfor %}
-    <form action="" method="post">
-        <label for="fname">First name</label><br>
-        <input type="text" name="fname" id="fname" class="border-2"><br>
-        <label for="lname">Last name</label><br>
-        <input type="text" name="lname" id="lname" class="border-2"><br>
-        <label for="email">Email</label><br>
-        <input type="email" name="email" id="email" class="border-2"><br>
-        <label for="password">Password</label><br>
-        <input type="password" name="password" class="border-2"><br>
-        <label for="cpassword">Confirm assword</label><br>
-        <input type="password" name="cpassword" class="border-2"><br>
-        <button type="submit" class="mt-4 border-2 rounded px-4 py-2">Sign up</button>
-    </form>
+    <div class="h-full w-full bg-slate-50">
+        <div class="h-full w-full max-w-sm mx-auto flex justify-center items-center flex-col">
+            <div class="w-full p-6 bg-white rounded-md shadow-sm shadow-gray-300 overflow-y-auto">
+                <h3 class="text-2xl font-semibold mt-2 mb-4 text-center p-2 uppercase">Sign up</h3>
+                <form action="" method="post" class="w-full">
+                    <div class="mb-2">
+                        <label for="first-name" class="font-semibold text-[.95rem]">First name</label>
+                        <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="fname" id="fname" placeholder="Enter your first name" required>
+                        {% for message in messages %}
+                            {% if message['f_name'] %}
+                                <p class="text-red-600 text-sm mt-2">{{ message['f_name'] }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="mb-4">
+                        <label for="last-name" class="font-semibold text-[.95rem]">Last name</label>
+                        <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="lname" id="lname" placeholder="Enter your last name" required>
+                        {% for message in messages %}
+                            {% if message['l_name'] %}
+                                <p class="text-red-600 text-sm mt-2">{{ message['l_name'] }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="font-semibold text-[.95rem]">Email address</label>
+                        <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="email" id="email" placeholder="Enter your email address" required>
+                        {% for message in messages %}
+                            {% if message['email'] %}
+                                <p class="text-red-600 text-sm mt-2">{{ message['email'] }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex justify-between">
+                            <label for="password" class="font-semibold text-[.95rem]">Password</label>
+                        </div>
+                        <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="password" id="password" placeholder="Enter your password" required>
+                        {% for message in messages %}
+                            {% if message['password'] %}
+                                <p class="text-red-600 text-sm mt-2">{{ message['password'] }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex justify-between">
+                            <label for="confirm-password" class="font-semibold text-[.95rem]">Confirm password</label>
+                        </div>
+                        <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="cpassword" id="cpassword" placeholder="Enter your confirm-password" required>
+                        {% for message in messages %}
+                            {% if message['c_password'] %}
+                                <p class="text-red-600 text-sm mt-2">{{ message['c_password'] }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="mb-4">
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" name="accept-terms" id="accept-terms">
+                            <label for="accept-terms" class="font-semibold text-[.95rem]">I accept <span class="font-normal">Terms and Conditions</span></label>
+                        </div>
+                        {% for message in messages %}
+                            {% if message['terms'] %}
+                                <p class="text-red-600 text-sm mt-2">{{ message['terms'] }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <button type="submit" class="w-full mt-6 mb-4 bg-slate-100 border-2 rounded px-2 py-1 block hover:bg-slate-300">Sign up</button>
+                </form>
+                <div class="mx-auto text-center mb-6">
+                    <p class="text-gray-500">Don't have an account? <a href="{{ url_for('app.signin') }}" class="text-gray-600 underline underline-offset-4 font-semibold hover:text-gray-800">Sign in</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

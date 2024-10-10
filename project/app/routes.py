@@ -2,13 +2,14 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 import os
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
-from project.utils.auth import authenticate, create_user
+from project.utils.auth import authenticate, create_user, validate_email, update_password
 from project.extensions.dependencies import task_manager, db
 from project.models.users import User, ProfilePicture
 from project.models.posts import Post, Link
 
-app = Blueprint('app', __name__, template_folder='templates', static_folder='static', static_url_path='/app/static')
+app = Blueprint('app', __name__, template_folder='templates', static_folder='static', static_url_path='/static')
 UPLOADS_FOLDER = os.path.join(app.static_folder, 'app/uploads')
+STATIC_URL_PATH = f'/{app.name}/static/app/uploads/'
 if not os.path.exists(UPLOADS_FOLDER): os.mkdir(UPLOADS_FOLDER)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 def allowed_file(filename):
@@ -59,7 +60,6 @@ def signup():
 @app.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
-    # print(f'/{app.name}/static/app/uploads/')
     data = request.form
     if data.get('action') == 'picture-form':
         file = request.files.get('profile-picture')
@@ -69,7 +69,7 @@ def settings():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file_path = os.path.join(UPLOADS_FOLDER, filename)
-            relative_url = f'/{app.name}/static/app/uploads/{filename}'
+            relative_url = STATIC_URL_PATH + filename
             file.save(file_path)
 
             # Clear all previous profile pictures and save new one
@@ -81,10 +81,25 @@ def settings():
             return render_template('app/settings.html')
         pass
     elif data.get('action') == 'info-form':
-        pass
+        if data.get('fname'):
+            current_user.first_name = str(data.get('fname'))
+            db.session.commit()
+            flash({'f_name':'First name updated successfully', 'cat': 'success'})
+        if data.get('lname'):
+            current_user.last_name = str(data.get('lname'))
+            db.session.commit()
+            flash({'l_name':'Last name updated successfully', 'cat': 'success'})
+        if data.get('email'):
+            email, error = validate_email(email=str(data.get('email')))
+            if email is not None:
+                current_user.email = email
+                db.session.commit()
+                flash({'email':'Email address updated successfully', 'cat': 'success'})
+            else:
+                flash({'email':error, 'cat': 'danger'})
     elif data.get('action') == 'password-form':
-        pass
-    print(data)
+        response = update_password(user=current_user, password=data.get('password'), confirm_password=data.get('cpassword'))
+        flash(response)
     return render_template('app/settings.html')
 
 @app.route('/signout')

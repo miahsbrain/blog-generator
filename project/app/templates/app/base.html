@@ -7,7 +7,7 @@
     <style>
         [x-cloak] { display: none !important; }
     </style>
-    <script defer src="{{ url_for('app.static', filename='app/js/alpinejs@3.x.x.min.js') }}"></script>
+    <script defer src="{{ url_for('app.static', filename='app/js/alpinejs3.js') }}"></script>
     <title>
         {% block title %}
             ADD TITLE
@@ -17,12 +17,12 @@
     {% block head %}
     {% endblock %}
 </head>
-<body x-data="{ sidebarOpen: false }">
+<body x-data="{ sidebarOpen: false, pfpModal: false }">
     <div class="flex h-screen w-screen flex-col">
         <header class="shrink-0">
             <div class="flex justify-between items-center p-3 w-full border-b border-b-gray-300 select-none">
                 <div class="flex items-center gap-4">
-                    <div class="cursor-pointer" @click="sidebarOpen = ! sidebarOpen">
+                    <div class="cursor-pointer" @click="sidebarOpen = !sidebarOpen, pfpModal = false">
                         <span class="text-3xl">
                             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"
@@ -30,11 +30,15 @@
                             </svg>
                         </span>
                     </div>
-                    <div class="flex justify-center items-center gap-3">
-                        <div class="h-8 aspect-square bg-transparent">
-                            <img src="{{ url_for('core.static', filename='core/img/blogai-logo.jpeg' ) }}" alt="" class="h-8 aspect-square rounded-full">
-                        </div>
-                        <h3>Dashboard</h3>
+                    <div class="">
+                        <a href="{{ url_for('app.index') }}">
+                            <div class="flex justify-center items-center gap-3">
+                                <div class="h-8 aspect-square bg-transparent">
+                                    <img src="{{ url_for('core.static', filename='core/img/blogai-logo.jpeg') }}" alt="" class="h-8 aspect-square rounded-full">
+                                </div>
+                                <h3>Dashboard</h3>
+                            </div>
+                        </a>
                     </div>
                 </div>
                 <div class="flex justify-center items-center gap-3">
@@ -49,14 +53,13 @@
                     </div>
                     <!-- Profile icon -->
                     <div
-                    x-data="{ pfpModal: false }"
                     @click="pfpModal = !pfpModal"
-                    class="h-8 aspect-square bg-transparent relative">
-                        <img src="{{ url_for('app.static', filename='app/img/pfp.jpg' ) }}" alt="" class="h-8 aspect-square rounded-full">
+                    class="h-8 w-8 aspect-square rounded-full bg-transparent relative">
+                        <img src="{{ current_user.get_profile_picture_url() }}" alt="" class="w-full h-full object-cover object-center rounded-full">
                         <div
                         x-show="pfpModal"
                         x-cloak
-                        class="absolute top-full mt-1 w-[15rem] z-[5] right-0 bg-slate-100 rounded-md p-1">
+                        class="absolute top-full mt-2 w-[12rem] md:w-[15rem] z-[5] right-0 bg-slate-100 rounded-md p-1">
                             <div>
                                 <a href="{{ url_for('app.settings') }}" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-200 rounded-md">
                                     <span class="text-xl">
@@ -194,7 +197,7 @@
         </header>
         <!-- Main -->
         <div class="flex-1 h-full overflow-auto">
-            <main class="h-full w-full">
+            <main class="h-full w-full" @click="sidebarOpen = false, pfpModal = false">
                 {% block content %}
                     ADD CONTENTS
                 {% endblock %}

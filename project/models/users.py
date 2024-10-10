@@ -50,6 +50,7 @@ class AnonymousUser(UserMixin):
     last_name = 'User'
     email = 'anonymoususer@anonymous.com'
     is_authenticated = False
+    password = 'unsafe-password'
 
     def __repr__(self) -> str:
         return f'<NAME: {self.first_name} {self.last_name}, EMAIL: {self.email}>'

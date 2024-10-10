@@ -7,7 +7,6 @@ Settings
 {% endblock %}
 {% block content %}
 {% set messages = get_flashed_messages() %}
-{{ current_user.get_profile_picture_url() }}
 <div class="h-full w-full bg-slate-50">
     <div class="h-full w-full max-w-5xl mx-auto flex justify-center items-center flex-col">
         <div class="w-full p-6 bg-white rounded-md shadow-sm shadow-gray-300 overflow-y-auto">
@@ -16,8 +15,10 @@ Settings
             <div class="w-full mt-4 mb-4">
                 <form action="" method="post" class="w-full" enctype="multipart/form-data">
                     <h4 class="text-xl font-semibold py-2 md:mt-4 uppercase">Profile Picture</h4>
-                    <div class="flex w-full gap-4 items-center">
-                        <img class="w-30 aspect-square rounded-full" src="https://via.placeholder.com/120" alt="Profile Picture">
+                    <div class="flex flex-col md:flex-row w-full gap-4 md:items-center items-start">
+                        <div class="w-[8rem] h-[8rem] aspect-square rounded-full mx-auto md:mx-0">
+                            <img class="w-full h-full object-cover object-center rounded-full" src="{{ current_user.get_profile_picture_url() }}" alt="Profile Picture">
+                        </div>
                         <input type="file" accept="image/*" name="profile-picture">
                     </div>
                     {% for message in messages %}
@@ -36,29 +37,29 @@ Settings
                     <div class="flex flex-col md:flex-row md:gap-4 w-full">
                         <div class="mb-2 w-full">
                             <label for="first-name" class="font-semibold text-[.95rem]">First name</label>
-                            <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="fname" id="fname" placeholder="Enter your first name" required>
+                            <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="fname" id="fname" placeholder="{{ current_user.first_name }}">
                             {% for message in messages %}
                                 {% if message['f_name'] %}
-                                    <p class="text-red-600 text-sm mt-2">{{ message['f_name'] }}</p>
+                                    <p class="{% if message['cat'] == 'danger' %} text-red-600 {% elif message['cat'] == 'success' %} text-green-600 {% endif %} text-sm mt-2">{{ message['f_name'] }}</p>
                                 {% endif %}
                             {% endfor %}
                         </div>
                         <div class="mb-4 w-full">
                             <label for="last-name" class="font-semibold text-[.95rem]">Last name</label>
-                            <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="lname" id="lname" placeholder="Enter your last name" required>
+                            <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="lname" id="lname" placeholder="{{ current_user.last_name }}">
                             {% for message in messages %}
                                 {% if message['l_name'] %}
-                                    <p class="text-red-600 text-sm mt-2">{{ message['l_name'] }}</p>
+                                    <p class="{% if message['cat'] == 'danger' %} text-red-600 {% elif message['cat'] == 'success' %} text-green-600 {% endif %} text-sm mt-2">{{ message['l_name'] }}</p>
                                 {% endif %}
                             {% endfor %}
                         </div>
                     </div>
                     <div class="mb-4 w-full">
                         <label for="email" class="font-semibold text-[.95rem]">Email address</label>
-                        <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="email" id="email" placeholder="Enter your email address" required>
+                        <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="email" id="email" placeholder="{{ current_user.email }}">
                         {% for message in messages %}
                             {% if message['email'] %}
-                                <p class="text-red-600 text-sm mt-2">{{ message['email'] }}</p>
+                                <p class="{% if message['cat'] == 'danger' %} text-red-600 {% elif message['cat'] == 'success' %} text-green-600 {% endif %} text-sm mt-2">{{ message['email'] }}</p>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -75,10 +76,10 @@ Settings
                             <div class="flex justify-between">
                                 <label for="password" class="font-semibold text-[.95rem]">Password</label>
                             </div>
-                            <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="password" id="password" placeholder="Enter your password" required>
+                            <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="password" id="password" placeholder="Enter new password" required>
                             {% for message in messages %}
                                 {% if message['password'] %}
-                                    <p class="text-red-600 text-sm mt-2">{{ message['password'] }}</p>
+                                    <p class="{% if message['cat'] == 'danger' %} text-red-600 {% elif message['cat'] == 'success' %} text-green-600 {% endif %} text-sm mt-2">{{ message['password'] }}</p>
                                 {% endif %}
                             {% endfor %}
                         </div>
@@ -86,10 +87,10 @@ Settings
                             <div class="flex justify-between">
                                 <label for="confirm-password" class="font-semibold text-[.95rem]">Confirm password</label>
                             </div>
-                            <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="cpassword" id="cpassword" placeholder="Enter your confirm-password" required>
+                            <input type="text" class="w-full outline-none bg-slate-50 ring-1 ring-slate-200 focus:ring-slate-400 rounded-sm px-2 py-2 mt-2 text-sm" name="cpassword" id="cpassword" placeholder="Confirm password" required>
                             {% for message in messages %}
                                 {% if message['c_password'] %}
-                                    <p class="text-red-600 text-sm mt-2">{{ message['c_password'] }}</p>
+                                    <p class="{% if message['cat'] == 'danger' %} text-red-600 {% elif message['cat'] == 'success' %} text-green-600 {% endif %} text-sm mt-2">{{ message['c_password'] }}</p>
                                 {% endif %}
                             {% endfor %}
                         </div>

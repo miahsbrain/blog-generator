@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, url_for, request
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from project.config import config
@@ -35,6 +35,14 @@ def create_app():
     # Login manager anonymous user class
     login_manager.anonymous_user = AnonymousUser
 
+    @login_manager.unauthorized_handler
+    def unauthorized_callback():
+        # Check if the user is trying to access an admin route
+        if '/admin/' in request.path:
+            return redirect(url_for('admin.index'))
+        # Otherwise, redirect to the normal user login
+        return redirect(url_for('app.signin'))
+
     # Import blueprints
     from project.core.routes import core
     from project.app.routes import app
@@ -46,8 +54,8 @@ def create_app():
     main.register_blueprint(app, url_prefix='/app')
     main.register_blueprint(admin, url_prefix='/admin')
     
-    with main.app_context():
-        db.create_all()
+    # with main.app_context():
+    #     db.create_all()
 
     migrate = Migrate(main, db)
     return main

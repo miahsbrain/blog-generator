@@ -14,6 +14,7 @@ class User(BaseModel, UserMixin):
     password = Column(String, nullable=False)
     is_admin = Column(Boolean, default=False)
     posts = relationship('Post', backref=backref('user'))
+    profile_picture = relationship("ProfilePicture", backref=backref('user', uselist = False), cascade='all, delete-orphan')
 
     def __repr__(self) -> str:
         return f'<NAME: {self.first_name} {self.last_name}, EMAIL: {self.email}>'
@@ -29,12 +30,25 @@ class User(BaseModel, UserMixin):
     
     def check_password(self, password):
         return True if bcrypt.check_password_hash(password, self.password) else False
+    
+    def get_profile_picture_url(self):
+        pfp = ProfilePicture.query.filter(ProfilePicture.user_id == self.uid).first()
+        return str(pfp.url) if pfp else 'https://via.placeholder.com/120'
 
+class ProfilePicture(BaseModel):
+    __tablename__ = 'profilepicture'
+    ppid = Column(Integer, autoincrement=True, unique=True, primary_key=True)
+    url = Column(String())
+    user_id = Column(String(), ForeignKey('users.uid'))
+
+    def __repr__(self):
+        return f'<URL: {self.url}, USER: {self.user_id}>'
 
 class AnonymousUser(UserMixin):
     uid = '10000000001'
     first_name = 'Anonymous'
     last_name = 'User'
+    email = 'anonymoususer@anonymous.com'
     is_authenticated = False
 
     def __repr__(self) -> str:

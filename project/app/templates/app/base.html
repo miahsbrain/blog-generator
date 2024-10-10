@@ -58,7 +58,7 @@
                         x-cloak
                         class="absolute top-full mt-1 w-[15rem] z-[5] right-0 bg-slate-100 rounded-md p-1">
                             <div>
-                                <a href="" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-200 rounded-md">
+                                <a href="{{ url_for('app.settings') }}" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-200 rounded-md">
                                     <span class="text-xl">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                             <path fill="currentColor"
@@ -67,14 +67,14 @@
                                     </span>
                                     <h3 class="font-semibold">Settings</h3>
                                 </a>
-                                <a href="" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-200 rounded-md">
+                                <a href="{{ url_for('app.signout') }}" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-200 rounded-md">
                                     <span class="text-xl">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                             <path fill="currentColor"
                                                 d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z" />
                                         </svg>
                                     </span>
-                                    <h3 class="font-semibold">Logout</h3>
+                                    <h3 class="font-semibold">Signout</h3>
                                 </a>
                             </div>
                         </div>
@@ -178,14 +178,14 @@
                             </span>
                             <h3 class="font-semibold">Plans</h3>
                         </a>
-                        <a href="" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-200 rounded-md">
+                        <a href="{{ url_for('app.signout') }}" class="flex items-center gap-1 w-full px-2 py-[0.3rem] hover:bg-gray-200 rounded-md">
                             <span class="text-3xl">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                     <path fill="currentColor"
                                         d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h7v2H5v14h7v2zm11-4l-1.375-1.45l2.55-2.55H9v-2h8.175l-2.55-2.55L16 7l5 5z" />
                                 </svg>
                             </span>
-                            <h3 class="font-semibold">Logout</h3>
+                            <h3 class="font-semibold">Signout</h3>
                         </a>
                     </div>
     

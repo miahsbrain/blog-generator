@@ -1,12 +1,22 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, Response
-from flask_login import current_user, login_user, logout_user
+import os
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.utils import secure_filename
 from project.utils.auth import authenticate, create_user
-from project.extensions.dependencies import task_manager
+from project.extensions.dependencies import task_manager, db
+from project.models.users import User, ProfilePicture
+from project.models.posts import Post, Link
 
+app = Blueprint('app', __name__, template_folder='templates', static_folder='static', static_url_path='/app/static')
+UPLOADS_FOLDER = os.path.join(app.static_folder, 'app/uploads')
+if not os.path.exists(UPLOADS_FOLDER): os.mkdir(UPLOADS_FOLDER)
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-app = Blueprint('app', __name__, template_folder='templates', static_folder='static', static_url_path='/')
 
 @app.route('/')
+@login_required
 def index():
     return render_template('app/index.html')
 
@@ -19,10 +29,11 @@ def signin():
     elif request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
+        remember = True if request.form.get('remember-me') else False
         user, error = authenticate(email=email, password=password)
         flash(error)
         if user is not None:
-            login_user(user=user)
+            login_user(user=user, remember=remember)
             return redirect(url_for('app.index'))
         return render_template('app/signin.html')
 
@@ -45,7 +56,39 @@ def signup():
 
         return render_template('app/signup.html')
 
+@app.route('/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    # print(f'/{app.name}/static/app/uploads/')
+    data = request.form
+    if data.get('action') == 'picture-form':
+        file = request.files.get('profile-picture')
+        if file.filename == '':
+            flash({'profile_picture':'No selected file', 'cat': 'danger'})
+            return render_template('app/settings.html')
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join(UPLOADS_FOLDER, filename)
+            relative_url = f'/{app.name}/static/app/uploads/{filename}'
+            file.save(file_path)
+
+            # Clear all previous profile pictures and save new one
+            current_user.profile_picture.clear()
+            pfp = ProfilePicture(url=relative_url, user=current_user)
+            db.session.add(pfp)
+            db.session.commit()
+            flash({'profile_picture':'Profile picture updated successfully!', 'cat': 'success'})
+            return render_template('app/settings.html')
+        pass
+    elif data.get('action') == 'info-form':
+        pass
+    elif data.get('action') == 'password-form':
+        pass
+    print(data)
+    return render_template('app/settings.html')
+
 @app.route('/signout')
+@login_required
 def signout():
     logout_user()
     return redirect(url_for('core.index'))
